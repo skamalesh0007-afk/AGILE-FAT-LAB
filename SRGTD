@@ -1,0 +1,22 @@
+
+pipeline script:
+
+pipeline {
+    agent any
+    stages {
+        stage('Clone') {
+            steps { checkout scm }
+        }
+        stage('Build Image') {
+            steps {
+                sh 'docker build -t dept-app:latest .'
+            }
+        }
+        stage('Deploy to K8s') {
+            steps {
+                // Assumes kubectl is configured for Docker Desktop K8s
+                sh 'kubectl apply -f deployment.yaml'
+            }
+        }
+    }
+}
